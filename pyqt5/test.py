@@ -1,11 +1,12 @@
 import PyQt5.QtWidgets as qtw
 import PyQt5.QtGui as qtg
+import string
 #print("na mehet")
 
 class MainWindow(qtw.QWidget):
-    def __init__(self):
+    def __init__(self,var_title):
         super().__init__()
-        self.setWindowTitle("Na mehet")
+        self.setWindowTitle(var_title)
         self.setLayout(qtw.QVBoxLayout())
         #label
         my_label = qtw.QLabel("Tulajdonkeppen megy")
@@ -22,14 +23,16 @@ class MainWindow(qtw.QWidget):
 
         #mutasd az appot
         self.show()
-        
+
         #fgv ide
         def nyomva():
             my_label.setText(my_entry.text())
             my_entry.setText("")
 
+string_title = "Ez lehetne a cim"
+
 app = qtw.QApplication([])
-mw = MainWindow()
+mw = MainWindow(string_title)
 
 if __name__ == "__main__":
     app.exec_()

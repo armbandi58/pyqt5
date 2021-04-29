@@ -1,1 +1,1 @@
-"#Python repo. for Qt5 apps in python language" 
+"#Python repo. for Qt5 apps in python language"
