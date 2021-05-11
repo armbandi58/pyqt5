@@ -42,32 +42,33 @@ class Ui_controlpanel(object):
         controlpanel.resize(630, 480)
         self.centralwidget = QtWidgets.QWidget(controlpanel)
         self.centralwidget.setObjectName("centralwidget")
-        self.button_base = QtWidgets.QPushButton(self.centralwidget)
+        self.button_base = QtWidgets.QPushButton(self.centralwidget, clicked = lambda: self.sendData_base())
         self.button_base.setGeometry(QtCore.QRect(420, 130, 171, 91))
         self.button_base.setObjectName("button_base")
-        self.button_test = QtWidgets.QPushButton(self.centralwidget)
+        self.button_test = QtWidgets.QPushButton(self.centralwidget, clicked = lambda: self.sendData_test())
         self.button_test.setGeometry(QtCore.QRect(420, 280, 171, 91))
         self.button_test.setObjectName("button_test")
-        self.pushButton = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton = QtWidgets.QPushButton(self.centralwidget, clicked = lambda: self.sendData_left())
         self.pushButton.setGeometry(QtCore.QRect(30, 110, 171, 91))
         self.pushButton.setObjectName("pushButton")
-        self.pushButton_4 = QtWidgets.QPushButton(self.centralwidget, clicked = lambda: self.sendData())
+        self.pushButton_4 = QtWidgets.QPushButton(self.centralwidget, clicked = lambda: self.sendData_right())
         self.pushButton_4.setGeometry(QtCore.QRect(200, 110, 171, 91))
         self.pushButton_4.setObjectName("pushButton_4")
-        self.pushButton_5 = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_5 = QtWidgets.QPushButton(self.centralwidget, clicked = lambda: self.sendData_up())
         self.pushButton_5.setGeometry(QtCore.QRect(30, 200, 171, 91))
         self.pushButton_5.setObjectName("pushButton_5")
-        self.pushButton_6 = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_6 = QtWidgets.QPushButton(self.centralwidget, clicked = lambda: self.sendData_down())
         self.pushButton_6.setGeometry(QtCore.QRect(200, 200, 171, 91))
         self.pushButton_6.setObjectName("pushButton_6")
-        self.pushButton_7 = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_7 = QtWidgets.QPushButton(self.centralwidget, clicked = lambda: self.sendData_headopen())
         self.pushButton_7.setGeometry(QtCore.QRect(30, 320, 171, 91))
         self.pushButton_7.setObjectName("pushButton_7")
-        self.pushButton_8 = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_8 = QtWidgets.QPushButton(self.centralwidget, clicked = lambda: self.sendData_headclose())
         self.pushButton_8.setGeometry(QtCore.QRect(200, 320, 171, 91))
         self.pushButton_8.setObjectName("pushButton_8")
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(210, 30, 211, 51))
+
         font = QtGui.QFont()
         font.setPointSize(20)
         font.setBold(True)
@@ -83,8 +84,25 @@ class Ui_controlpanel(object):
         self.statusbar.setObjectName("statusbar")
         controlpanel.setStatusBar(self.statusbar)
 
+ 
+        self.label_action = QtWidgets.QLabel(self.centralwidget)
+        self.label_action.setGeometry(QtCore.QRect(290, 420, 131, 51))
+        font = QtGui.QFont()
+        font.setFamily("Times New Roman")
+        font.setPointSize(16)
+        self.label_action.setFont(font)
+        self.label_action.setObjectName("label_action")
+        self.label_status = QtWidgets.QLabel(self.centralwidget)
+        self.label_status.setGeometry(QtCore.QRect(430, 420, 171, 51))
+        font = QtGui.QFont()
+        font.setPointSize(14)
+        self.label_status.setFont(font)
+        self.label_status.setObjectName("label_status")
+
+
         self.retranslateUi(controlpanel)
         QtCore.QMetaObject.connectSlotsByName(controlpanel)
+
 
     def retranslateUi(self, controlpanel):
         _translate = QtCore.QCoreApplication.translate
@@ -98,12 +116,57 @@ class Ui_controlpanel(object):
         self.pushButton_7.setText(_translate("controlpanel", "Head - OPEN"))
         self.pushButton_8.setText(_translate("controlpanel", "Head - CLOSE "))
         self.label.setText(_translate("controlpanel", "Control Panel"))
-    
-    def sendData(self):
-        i = "menjen"
+        self.label_action.setText(_translate("controlpanel", "Last action: "))
+        self.label_status.setText(_translate("controlpanel", "-"))
+
+    def sendData_left(self):
+        i = "left"
         var_serial = serial.Serial(connectPort, baudrate=9600, timeout=1000)
         var_serial.write(i.encode())
-        #var_serial.decode("Menjen")
+        self.label_status.setText("LEFT")
+
+    def sendData_right(self):
+        i = "right"
+        var_serial = serial.Serial(connectPort, baudrate=9600, timeout=1000)
+        var_serial.write(i.encode())
+        self.label_status.setText("RIGHT")
+    
+    def sendData_up(self):
+        i = "up"
+        var_serial = serial.Serial(connectPort, baudrate=9600, timeout=1000)
+        var_serial.write(i.encode())
+        self.label_status.setText("UP")
+    
+    def sendData_down(self):
+        i = "down"
+        var_serial = serial.Serial(connectPort, baudrate=9600, timeout=1000)
+        var_serial.write(i.encode())
+        self.label_status.setText("DOWN")
+    
+    def sendData_headopen(self):
+        i = "headopen"
+        var_serial = serial.Serial(connectPort, baudrate=9600, timeout=1000)
+        var_serial.write(i.encode())
+        self.label_status.setText("HEAD - OPEN")
+
+    def sendData_headclose(self):
+        i = "headclose"
+        var_serial = serial.Serial(connectPort, baudrate=9600, timeout=1000)
+        var_serial.write(i.encode())
+        self.label_status.setText("HEAD - CLOSE")
+
+    def sendData_base(self):
+        i = "base"
+        var_serial = serial.Serial(connectPort, baudrate=9600, timeout=1000)
+        var_serial.write(i.encode())
+        self.label_status.setText("BASE")
+
+    def sendData_test(self):
+        i = "test"
+        var_serial = serial.Serial(connectPort, baudrate=9600, timeout=1000)
+        var_serial.write(i.encode())
+        self.label_status.setText("HEAD - TEST")
+
 
 
 if __name__ == "__main__":

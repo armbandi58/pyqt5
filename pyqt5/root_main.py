@@ -22,7 +22,11 @@ class Ui_MainWindow(object):
         self.ui.setupUi(self.window2)
         self.window2.show()
 
+        #global asd = self.window2
+
     def setupUi(self, MainWindow):
+        global connection
+
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(798, 400)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
@@ -30,13 +34,13 @@ class Ui_MainWindow(object):
         self.textBrowser = QtWidgets.QTextBrowser(self.centralwidget)
         self.textBrowser.setGeometry(QtCore.QRect(5, 10, 461, 361))
         self.textBrowser.setObjectName("textBrowser")
-        
+
         self.connecting_label = QtWidgets.QLabel(self.centralwidget)
         font = QtGui.QFont()
         font.setPointSize(18)
         font.setBold(True)
         font.setWeight(75)
-        self.connecting_label.setFont(font)        
+        self.connecting_label.setFont(font)
         self.connecting_label.setGeometry(QtCore.QRect(540, 10, 271, 31))
         self.connecting_label.setObjectName("connecting_label")
 
@@ -44,26 +48,27 @@ class Ui_MainWindow(object):
         self.checkBox = QtWidgets.QCheckBox(self.centralwidget)
         self.checkBox.setGeometry(QtCore.QRect(650, 230, 131, 51))
         self.checkBox.setObjectName("checkBox")
-       
+
         self.pushButton = QtWidgets.QPushButton(self.centralwidget, clicked = lambda: self.connect_to_com())
         self.pushButton.setGeometry(QtCore.QRect(470, 60, 161, 81))
         self.pushButton.setObjectName("pushButton")
-        
+
         self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget, clicked = lambda: self.disconnect())
         self.pushButton_2.setGeometry(QtCore.QRect(630, 60, 161, 81))
         self.pushButton_2.setObjectName("pushButton_2")
         self.pushButton_3 = QtWidgets.QPushButton(self.centralwidget, clicked = lambda: self.get_DATA())
         self.pushButton_3.setGeometry(QtCore.QRect(470, 150, 321, 51))
         self.pushButton_3.setObjectName("pushButton_3")
-        self.pushButton_4 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_4.clicked.connect(self.windows2)
+        self.pushButton_4 = QtWidgets.QPushButton(self.centralwidget, clicked = lambda: self.controlpanel())
+        #self.pushButton_4.clicked.connect(self.windows2)
+
         self.pushButton_4.setGeometry(QtCore.QRect(470, 210, 161, 81))
         self.pushButton_4.setObjectName("pushButton_4")
-        
+
         self.button_clear = QtWidgets.QPushButton(self.centralwidget, clicked = lambda: self.clear_terminal())
         self.button_clear.setGeometry(QtCore.QRect(540, 340, 161, 41))
         self.button_clear.setObjectName("button_clear")
-        
+
 
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
@@ -82,11 +87,22 @@ class Ui_MainWindow(object):
         self.checkBox.setText(_translate("MainWindow", "LED blink"))
         self.pushButton.setText(_translate("MainWindow", "Connect"))
         self.pushButton_2.setText(_translate("MainWindow", "Disconnect"))
-        self.pushButton_3.setText(_translate("MainWindow", "READ the errorcode"))
+        self.pushButton_3.setText(_translate("MainWindow", "READ the serial channel"))
         self.pushButton_4.setText(_translate("MainWindow", "ControlPanel"))
         self.button_clear.setText(_translate("MainWindow","Clear terminal"))
         self.actionOpen.setText(_translate("MainWindow", "Open"))
-        
+
+
+    def controlpanel(self):
+#        self.pushButton_4.clicked.connect(self.windows2)
+
+        if connection == 2:
+            self.textBrowser.append("Control panel open")
+           # self.pushButton_4.clicked.connect(self.windows2)
+           # self.pushButton_4.clicked.connect(self.windows2)
+           # self.window2.show()
+        else:
+            self.textBrowser.append("!!!NEED CONNECTION!!!")
 
     def connect_to_com(self):
         global connection
@@ -99,6 +115,7 @@ class Ui_MainWindow(object):
                 var_serial = serial.Serial(connectPort, baudrate=9600, timeout=1000)
                 connection = 2
                 self.connecting_label.setText("Connected")
+                self.pushButton_4.clicked.connect(self.windows2)
                     #flag_while = True
             else:
                 self.textBrowser.append("[-] ERROR, can`t connected to device")
@@ -117,8 +134,12 @@ class Ui_MainWindow(object):
             self.textBrowser.append("Already DISCONNECTED")
 
     def get_DATA(self):
-        var_serial = serial.Serial(connectPort, baudrate=9600, timeout=1000)
-        self.textBrowser.append(var_serial.readline(1000).decode('utf'))
+        global connection
+        if connection == 2:
+            var_serial = serial.Serial(connectPort, baudrate=9600, timeout=1000)
+            self.textBrowser.append(var_serial.readline(1000).decode('utf'))
+        else:
+            self.textBrowser.append("Cant read, the device disconnected")
 
     def clear_terminal(self):
         self.textBrowser.setText("")
@@ -146,15 +167,12 @@ def findPort(portsFound):
 found_Ports = getPort()
 connectPort = findPort(found_Ports)
 
-rob = 'robot.png'
-
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
     ui = Ui_MainWindow()
     ui.setupUi(MainWindow)
-    app.setWindowIcon(QIcon(rob))
     MainWindow.show()
     sys.exit(app.exec_())
 
