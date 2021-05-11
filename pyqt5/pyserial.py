@@ -47,7 +47,6 @@ def findPort(portsFound):
         if 'STM' in strPort:
             splitPort = strPort.split(' ')
             comPort = (splitPort[0])
-
     return comPort
 
 found_Ports = getPort()
